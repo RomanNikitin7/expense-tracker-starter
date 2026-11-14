@@ -25,9 +25,9 @@ This is a small single-page React 19 app built with Vite (`@vitejs/plugin-react`
   - The category list is a single `categories` array in the component and is shared by the form and the filter dropdown.
 - Styling is plain CSS: `src/index.css` (global) and `src/App.css` (component). No CSS framework.
 
-### Known issue that affects the data model
+### Data model note
 
-Amounts are stored as **strings** (seed data like `amount: "5000"`, and the form's `amount` state comes from a number input's string value). The `reduce` calls for `totalIncome` and `totalExpenses` start at `0` and add these values with `+`, so they concatenate instead of summing (e.g. Income renders as `$05000`). Any fix to the totals should convert amounts to numbers, either in the data or in the reducers.
+Transaction `amount` values are **numbers** (seed data like `amount: 5000`). The form's string input is converted with `Number(amount)` in `handleSubmit`, so keep that conversion when touching the form; otherwise the totals would concatenate strings again.
 
 ## Course context
 
