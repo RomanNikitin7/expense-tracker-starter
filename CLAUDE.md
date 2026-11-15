@@ -23,8 +23,8 @@ This is a small single-page React 19 app built with Vite (`@vitejs/plugin-react`
 - `src/components/` holds the UI pieces:
   - `Summary.jsx` — takes `transactions` and computes income, expenses, and balance itself.
   - `TransactionForm.jsx` — owns the add-form fields. On submit it builds the transaction object (`id: Date.now()`, today's date) and calls `onAdd`; it does not touch the list directly.
-  - `TransactionList.jsx` — owns the type and category filter state, filters `transactions`, and renders the table.
-- Data flows one way: `App` holds `transactions` → passes it to `Summary` and `TransactionList` → the form calls `onAdd` → `App.handleAdd` appends to state. Adding a transaction only updates in-memory state; a page reload resets it.
+  - `TransactionList.jsx` — owns the type and category filter state, filters `transactions`, and renders the table. Each row has a Delete button; it asks for confirmation (`window.confirm`) and then calls `onDelete(id)`.
+- Data flows one way: `App` holds `transactions` → passes it to `Summary` and `TransactionList` → the form calls `onAdd` → `App.handleAdd` appends to state; the list calls `onDelete` → `App.handleDelete` filters the item out by `id`. Adding a transaction only updates in-memory state; a page reload resets it.
 - `categories` is defined once in `App` and passed as a prop to both `TransactionForm` and `TransactionList`.
 - Styling is plain CSS: `src/index.css` (global) and `src/App.css` (shared by all components). No CSS framework.
 
