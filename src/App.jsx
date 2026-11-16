@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import './App.css'
 import Summary from './components/Summary.jsx'
-import CategoryChart from './components/CategoryChart.jsx'
 import TransactionForm from './components/TransactionForm.jsx'
 import TransactionList from './components/TransactionList.jsx'
 
@@ -28,18 +27,17 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <h1>Finance Tracker</h1>
-      <p className="subtitle">Track your income and expenses</p>
+    <main className="app">
+      <header className="app-header">
+        <h1>Finance Tracker</h1>
+      </header>
 
       <Summary transactions={transactions} />
-
-      <CategoryChart transactions={transactions} />
 
       <TransactionForm categories={categories} onAdd={handleAdd} />
 
       <TransactionList transactions={transactions} categories={categories} onDelete={handleDelete} />
-    </div>
+    </main>
   );
 }
 

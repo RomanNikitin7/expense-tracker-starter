@@ -1,11 +1,18 @@
 import { useState } from 'react'
+import { categoryColor, formatMoney, formatDate, capitalize } from '../format.js'
+
+const TYPE_FILTERS = [
+  { value: "all", label: "All" },
+  { value: "income", label: "Income" },
+  { value: "expense", label: "Expenses" },
+];
 
 function TransactionList({ transactions, categories, onDelete }) {
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
 
   const handleDeleteClick = (t) => {
-    if (window.confirm("Are you sure you want to delete this transaction?")) {
+    if (window.confirm(`Delete "${t.description}"?`)) {
       onDelete(t.id);
     }
   };
@@ -17,51 +24,80 @@ function TransactionList({ transactions, categories, onDelete }) {
   if (filterCategory !== "all") {
     filteredTransactions = filteredTransactions.filter(t => t.category === filterCategory);
   }
+  filteredTransactions = [...filteredTransactions].sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
 
   return (
-    <div className="transactions">
-      <h2>Transactions</h2>
-      <div className="filters">
-        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-          <option value="all">All Types</option>
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
-        <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
-          <option value="all">All Categories</option>
-          {categories.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
+    <section className="transactions" aria-labelledby="list-heading">
+      <div className="list-header">
+        <h2 id="list-heading">Transactions</h2>
+        <div className="filters">
+          <fieldset className="toggle toggle-small">
+            <legend className="visually-hidden">Show</legend>
+            {TYPE_FILTERS.map(f => (
+              <label key={f.value} className={filterType === f.value ? "toggle-option is-active" : "toggle-option"}>
+                <input
+                  type="radio"
+                  name="filter-type"
+                  value={f.value}
+                  checked={filterType === f.value}
+                  onChange={() => setFilterType(f.value)}
+                />
+                {f.label}
+              </label>
+            ))}
+          </fieldset>
+          <label className="field field-small">
+            <span className="visually-hidden">Category</span>
+            <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+              <option value="all">All categories</option>
+              {categories.map(cat => (
+                <option key={cat} value={cat}>{capitalize(cat)}</option>
+              ))}
+            </select>
+          </label>
+        </div>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTransactions.map(t => (
-            <tr key={t.id}>
-              <td>{t.date}</td>
-              <td>{t.description}</td>
-              <td>{t.category}</td>
-              <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
-                {t.type === "income" ? "+" : "-"}${t.amount}
-              </td>
-              <td>
-                <button className="delete-btn" onClick={() => handleDeleteClick(t)}>Delete</button>
-              </td>
+      {filteredTransactions.length === 0 ? (
+        <p className="list-empty">No transactions match these filters.</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Description</th>
+              <th scope="col">Category</th>
+              <th scope="col" className="num">Amount</th>
+              <th scope="col"><span className="visually-hidden">Actions</span></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {filteredTransactions.map(t => (
+              <tr key={t.id}>
+                <td className="cell-date">{formatDate(t.date)}</td>
+                <td className="cell-description">{t.description}</td>
+                <td className="cell-category">
+                  <span className="swatch" style={{ background: categoryColor(t.category) }} />
+                  {capitalize(t.category)}
+                </td>
+                <td className={t.type === "income" ? "num amount-income" : "num amount-expense"}>
+                  {t.type === "income" ? "+" : "−"}{formatMoney(t.amount)}
+                </td>
+                <td className="cell-action">
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDeleteClick(t)}
+                    aria-label={`Delete ${t.description}`}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </section>
   )
 }
 

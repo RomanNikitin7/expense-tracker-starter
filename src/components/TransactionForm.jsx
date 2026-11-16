@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { capitalize } from '../format.js'
 
 function TransactionForm({ categories, onAdd }) {
   const [description, setDescription] = useState("");
@@ -26,33 +27,57 @@ function TransactionForm({ categories, onAdd }) {
   };
 
   return (
-    <div className="add-transaction">
-      <h2>Add Transaction</h2>
+    <section className="add-transaction" aria-labelledby="add-heading">
+      <h2 id="add-heading">Add a transaction</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        <select value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          {categories.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
+        <fieldset className="toggle">
+          <legend className="visually-hidden">Type</legend>
+          {["expense", "income"].map(option => (
+            <label key={option} className={type === option ? "toggle-option is-active" : "toggle-option"}>
+              <input
+                type="radio"
+                name="type"
+                value={option}
+                checked={type === option}
+                onChange={() => setType(option)}
+              />
+              {capitalize(option)}
+            </label>
           ))}
-        </select>
-        <button type="submit">Add</button>
+        </fieldset>
+
+        <label className="field field-description">
+          <span className="visually-hidden">Description</span>
+          <input
+            type="text"
+            placeholder="What was it for?"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </label>
+        <label className="field field-amount">
+          <span className="visually-hidden">Amount</span>
+          <input
+            type="number"
+            inputMode="decimal"
+            min="0"
+            step="0.01"
+            placeholder="0.00"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </label>
+        <label className="field">
+          <span className="visually-hidden">Category</span>
+          <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            {categories.map(cat => (
+              <option key={cat} value={cat}>{capitalize(cat)}</option>
+            ))}
+          </select>
+        </label>
+        <button type="submit" className="add-btn">Add {type}</button>
       </form>
-    </div>
+    </section>
   )
 }
 

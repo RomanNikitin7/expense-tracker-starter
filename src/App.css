@@ -1,119 +1,235 @@
 .app {
-  max-width: 800px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 40px 20px 64px;
 }
 
-h1 {
-  margin-bottom: 4px;
+.app-header {
+  margin-bottom: 40px;
 }
 
-.subtitle {
-  margin-bottom: 20px;
-  color: #666;
+.app-header h1 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink-soft);
 }
+
+h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* ---------- Summary: the money band ---------- */
 
 .summary {
+  margin-bottom: 48px;
+}
+
+.summary .headline {
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.summary .headline-over {
+  color: var(--expense);
+}
+
+.summary-detail {
+  margin-top: 8px;
+  color: var(--ink-soft);
+}
+
+.band {
   display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
+  height: 64px;
+  margin-top: 28px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--paper-deep);
+  gap: 2px;
 }
 
-.summary-card {
-  flex: 1;
-  border: 1px solid #ddd;
-  padding: 14px;
-  background: #fff;
+.band-segment {
+  display: block;
+  min-width: 4px;
+  transition: width 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.summary-card h3 {
-  font-size: 13px;
-  color: #888;
-  margin-bottom: 4px;
+.band-left {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--paper-deep) 0 6px,
+    var(--surface) 6px 12px
+  );
 }
 
-.income-amount {
-  color: green;
-  font-size: 20px;
-  font-weight: bold;
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-top: 16px;
+  list-style: none;
+  font-size: 0.9375rem;
 }
 
-.expense-amount {
-  color: red;
-  font-size: 20px;
-  font-weight: bold;
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.balance-amount {
-  font-size: 20px;
-  font-weight: bold;
+.legend-value {
+  color: var(--ink-soft);
 }
+
+.legend-empty {
+  margin-top: 16px;
+  color: var(--ink-soft);
+}
+
+.swatch {
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.swatch-left {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+
+/* ---------- Shared controls ---------- */
+
+.field input,
+.field select {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-field);
+}
+
+.field input::placeholder {
+  color: #8A968F;
+}
+
+.field input:focus-visible,
+.field select:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 0;
+  border-color: var(--focus);
+}
+
+.toggle {
+  display: inline-flex;
+  padding: 3px;
+  border: none;
+  border-radius: var(--radius-field);
+  background: var(--paper-deep);
+}
+
+.toggle-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  height: 38px;
+  border-radius: 6px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.toggle-option.is-active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(28, 43, 38, 0.12);
+}
+
+.toggle-option:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+/* ---------- Add form ---------- */
 
 .add-transaction {
-  border: 1px solid #ddd;
-  padding: 16px;
-  margin-bottom: 24px;
-  background: #fff;
+  margin-bottom: 48px;
+  padding: 20px;
+  background: var(--paper-deep);
+  border-radius: var(--radius-panel);
 }
 
 .add-transaction h2 {
-  font-size: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
-form {
-  display: flex;
+.add-transaction form {
+  display: grid;
+  grid-template-columns: auto minmax(0, 2fr) minmax(96px, 1fr) minmax(0, 1.1fr) auto;
   gap: 8px;
-  flex-wrap: wrap;
+  align-items: center;
 }
 
-form input,
-form select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
+.add-transaction .toggle {
+  background: var(--rule);
 }
 
-form input[type="text"] {
-  flex: 2;
-}
-
-form input[type="number"] {
-  flex: 1;
-}
-
-form select {
-  flex: 1;
-}
-
-form button {
-  padding: 8px 20px;
-  background: #333;
-  color: #fff;
+.add-btn {
+  height: 44px;
+  padding: 0 18px;
   border: none;
+  border-radius: var(--radius-field);
+  background: var(--ink);
+  color: var(--surface);
+  font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
-  font-size: 14px;
 }
 
-.transactions {
-  margin-bottom: 24px;
+.add-btn:hover {
+  background: #2C3F38;
 }
 
-.transactions h2 {
-  font-size: 16px;
+/* ---------- Transaction list ---------- */
+
+.list-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   margin-bottom: 12px;
 }
 
 .filters {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 12px;
 }
 
-.filters select {
-  padding: 6px;
-  border: 1px solid #ccc;
-  font-size: 13px;
+.toggle-small .toggle-option {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 0.9375rem;
+}
+
+.field-small select {
+  height: 38px;
+  font-size: 0.9375rem;
 }
 
 table {
@@ -121,40 +237,170 @@ table {
   border-collapse: collapse;
 }
 
-thead {
-  background: #f5f5f5;
-}
-
-th, td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  font-size: 14px;
-}
-
 th {
-  font-size: 12px;
-  color: #888;
-  text-transform: uppercase;
+  padding: 10px 8px;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--rule);
 }
 
-.chart {
-  border: 1px solid #ddd;
-  padding: 16px;
-  margin-bottom: 24px;
-  background: #fff;
+td {
+  padding: 14px 8px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: middle;
 }
 
-.chart h2 {
-  font-size: 16px;
-  margin-bottom: 12px;
+th:first-child,
+td:first-child {
+  padding-left: 0;
+}
+
+th:last-child,
+td:last-child {
+  padding-right: 0;
+}
+
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.cell-date {
+  width: 72px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.cell-description {
+  font-weight: 500;
+}
+
+.cell-category {
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.cell-category .swatch {
+  margin-right: 8px;
+}
+
+.amount-income,
+.amount-expense {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.amount-income {
+  color: var(--income);
+}
+
+.amount-expense {
+  color: var(--expense);
+}
+
+.cell-action {
+  width: 1%;
+  text-align: right;
 }
 
 .delete-btn {
-  padding: 4px 10px;
-  background: #eee;
-  border: 1px solid #ccc;
+  margin-left: 12px;
+  padding: 6px 10px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
   cursor: pointer;
-  font-size: 12px;
-  color: #333;
+}
+
+.delete-btn:hover {
+  background: var(--paper-deep);
+  color: var(--expense);
+}
+
+.list-empty {
+  padding: 32px 0;
+  color: var(--ink-soft);
+  border-top: 1px solid var(--rule);
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 640px) {
+  .app {
+    padding-top: 24px;
+  }
+
+  .app-header {
+    margin-bottom: 28px;
+  }
+
+  .band {
+    height: 48px;
+  }
+
+  .add-transaction form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .add-transaction .toggle,
+  .field-description {
+    grid-column: 1 / -1;
+  }
+
+  .add-transaction .toggle-option {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .add-btn {
+    grid-column: 1 / -1;
+  }
+
+  thead {
+    display: none;
+  }
+
+  table,
+  tbody {
+    display: block;
+  }
+
+  tr {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "desc desc amount"
+      "date cat action";
+    align-items: center;
+    column-gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  td {
+    padding: 0;
+    border: none;
+  }
+
+  .cell-description { grid-area: desc; }
+  .num { grid-area: amount; }
+  .cell-action { grid-area: action; width: auto; }
+
+  .cell-date { grid-area: date; }
+  .cell-category { grid-area: cat; }
+
+  .cell-date,
+  .cell-category {
+    width: auto;
+    font-size: 0.875rem;
+  }
+
+  .delete-btn {
+    margin-left: 0;
+    padding: 2px 6px;
+  }
 }
