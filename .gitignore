@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Claude Code personal (non-shared) files
+.claude/settings.local.json
+CLAUDE.local.md
