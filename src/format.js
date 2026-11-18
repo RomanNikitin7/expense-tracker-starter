@@ -1,23 +1,24 @@
-export const CATEGORY_COLORS = {
-  housing: "#2F5D62",
-  food: "#B9822A",
-  utilities: "#5468A0",
-  transport: "#80538F",
-  entertainment: "#B84E63",
-  salary: "#4F7A3A",
-  other: "#7D7F70",
-};
-
-export const categoryColor = (category) => CATEGORY_COLORS[category] || CATEGORY_COLORS.other;
-
-const money = new Intl.NumberFormat("en-US", {
+const currency = (digits) => new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
-  maximumFractionDigits: 2,
-  minimumFractionDigits: 0,
+  minimumFractionDigits: digits,
+  maximumFractionDigits: digits,
 });
+const wholeMoney = currency(0);
+const centsMoney = currency(2);
 
-export const formatMoney = (value) => money.format(value);
+// Whole amounts read "$5,000"; anything with cents reads "$12.50", never "$12.5".
+export const formatMoney = (value) => {
+  const rounded = Math.round(value * 100) / 100;
+  return (Number.isInteger(rounded) ? wholeMoney : centsMoney).format(rounded);
+};
+
+// Today's date in the user's local time zone (toISOString would use UTC).
+export const todayISO = () => {
+  const d = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+};
 
 const shortDate = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
 

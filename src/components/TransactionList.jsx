@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { categoryColor, formatMoney, formatDate, capitalize } from '../format.js'
+import { categories, CATEGORY_COLORS, CATEGORY_LABELS } from '../constants.js'
+import { formatMoney, formatDate } from '../format.js'
 
 const TYPE_FILTERS = [
   { value: "all", label: "All" },
@@ -7,7 +8,7 @@ const TYPE_FILTERS = [
   { value: "expense", label: "Expenses" },
 ];
 
-function TransactionList({ transactions, categories, onDelete }) {
+function TransactionList({ transactions, onDelete }) {
   const [filterType, setFilterType] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
 
@@ -51,7 +52,7 @@ function TransactionList({ transactions, categories, onDelete }) {
             <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
               <option value="all">All categories</option>
               {categories.map(cat => (
-                <option key={cat} value={cat}>{capitalize(cat)}</option>
+                <option key={cat} value={cat}>{CATEGORY_LABELS[cat]}</option>
               ))}
             </select>
           </label>
@@ -77,8 +78,16 @@ function TransactionList({ transactions, categories, onDelete }) {
                 <td className="cell-date">{formatDate(t.date)}</td>
                 <td className="cell-description">{t.description}</td>
                 <td className="cell-category">
-                  <span className="swatch" style={{ background: categoryColor(t.category) }} />
-                  {capitalize(t.category)}
+                  <span
+                    className="category-pill"
+                    style={{ background: (CATEGORY_COLORS[t.category] || CATEGORY_COLORS.other).bg }}
+                  >
+                    <span
+                      className="swatch"
+                      style={{ background: (CATEGORY_COLORS[t.category] || CATEGORY_COLORS.other).color }}
+                    />
+                    {CATEGORY_LABELS[t.category] || CATEGORY_LABELS.other}
+                  </span>
                 </td>
                 <td className={t.type === "income" ? "num amount-income" : "num amount-expense"}>
                   {t.type === "income" ? "+" : "−"}{formatMoney(t.amount)}
